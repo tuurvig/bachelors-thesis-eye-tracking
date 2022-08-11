@@ -1,0 +1,112 @@
+\chapter{Design}
+\begin{chapterabstract}
+The~design of the~application prototype is being covered by this chapter. The~form of the~prototype is chosen and a~specific solution is proposed.
+\end{chapterabstract}
+
+\section{Requirements}
+The~thesis assignment and the~consultations with the~supervisor provide functional and non-functional requirements of the~prototype. 
+
+\subsection{Functional requirements}
+Functional requirements define what functionality the~prototype should contain. While creating the~assignment, it was unclear what form it would assume and what methods would be used. 
+
+\begin{description}
+    \item[Gaze data collection] The~prototype application should be able to~collect gaze data in some way provided by a~VR HMD with ET.
+    \item[Gaze data visualisation] The~prototype shall choose an~appropriate visualisation technique that will be applied to~the~collected gaze data.
+    \item[Environment for data collection and visualisation] A~test scene, or experiment, in which gaze data can be visualised and collected from users moving through the~scene.
+    \item[Make resultant data] Data are to~be collected from multiple users in a~same environment and combined into resultant data.
+\end{description}
+
+\subsection{Non-functional requirements}
+Non-functional requirements demand certain qualities and define the~limitations of the~prototype.
+
+\begin{description}
+    \item[Technologies] The~main functionalities of the~prototype such as data collection and visualisation, must be developed using a~game engine of choice, Unreal Engine or Unity. Standalone supporting programmes written in \emph{C\texttt{++}} or \emph{Python} can be used to~achieve some of its requirements.
+    \item[Documentation] All code must be commented on and described in good detail.
+\end{description}
+
+\section{Prototype application}
+This section covers the~thought process considering the~situation in which the~prototype was designed, and results in a~decision on what technologies will be used and what form the~prototype application will take.
+
+\subsection{Selected technologies}
+\subsubsection*{Software}
+An~analysis of current solutions was undertaken -- Section~\ref{sec:solutions} -- to~select the~most appropriate technology to~allow for maximum opportunity to~offer a~new solution. The~Masaryk University thesis dealt with a~similar topic in the~Unity environment. Cognitive3D offers a~very robust, but proprietary, system that uses both engines. Based on this information, this thesis will focus on development in Unreal Engine, as no other open source solution to~this ET problem has been found. Unreal version 4.27 will be used to~develop the~main functionalities of the~prototype. Unreal Engine 5 had not been fully released when this decision was made. During the~writing of the~thesis, this was no longer the~case.
+
+Furthermore, the~Python programming language with the~Pillow library will be used to~create one simple support programme that will process the~collected gaze data.
+
+\subsubsection*{Hardware}
+In terms of hardware, there were not many options available and it was generally difficult to~find access to~a~VR headset with ET. There was an~opportunity to~use the~3D~CAVE lab at the~Faculty of Engineering at CTU, which contains an~XTAL headset -- Section~\ref{sec:xtal}. 
+
+
+Conveniently, there is no solution available that utilises the~ET capabilities of XTAL and, therefore, will be used for this thesis. Furthermore, the~device is of Czech production with local support, and it will be possible to~discuss possible problems and issues with Vrgineers in a~relatively short time.
+
+\subsection{Form}
+The~requirement for the~prototype refers to~the~technology used, but does not mention what form it should take. In order to~select the~best form of the~prototype, the~following situation had to~be taken into account.
+
+\subsubsection*{Situation}
+The~XTAL headset was chosen for development, but was not physically available for testing at the~time. Based on the~analysis in Section~\ref{sec:xtal}, it operates on its native runtime and it was assumed, due to~the~lack of official data on its ET, that it would return gaze data in the~structure from Section~\ref{sec:gaze-data}. When the~headset became available, it was discovered that this was not true and the~method of data collection had to~be consulted with Vrgineers support, from whom a~beta version of their OpenXR runtime was received. This did not happen until the~later stages of development.
+
+To~avoid unnecessary time loss waiting for the~headset's availability and the~later consultations with support, it was decided to~take the~prototype concept a~bit differently.
+
+\subsubsection*{Proposal}
+The~prototype application must be developed without the~access to~a~headset in such a~way that the~collected data from it can be easily used when available. The~task is to~assume that gaze data are available and can be processed, but it is necessary to~provide some alternative to~substitute for their presence. The~forward vector of the~virtual camera inside the~Unreal Engine scene can be used for this purpose.
+
+This made it possible to~think about conceiving the~prototype as an~Unreal Engine \emph{plug-in} that will extend the~functionality of the~game engine or the~Unreal project by the~possibility of collecting and visualising gaze data. The~plug-in will be independent of any~ET hardware and will only require the~origin and direction vector as input.
+
+The~plug-in has the~advantage that it can be mounted on any UE project of the~same version in which it was built. The~assignment needs to~be slightly adjusted to~reflect this change.
+
+\subsection{Modification}
+
+The~plug-in will cover the~functionality of data collection and visualisation, but it still remains to~create an~experiment, the~environment where the~data is collected. The~experiment will be done separately as an~Unreal Engine project, and the~plug-in will be used to~build it. The~plug-in must include functionality that will support the~construction of the~test environment. 
+
+The~practical portion of this thesis is divided into two chapters. The~implementation chapter will present the~implementation of the~plug-in itself, and the~experiment chapter will describe the~construction process of a~test environment using the~plug-in. It will also cover the~use of the~XTAL headset and the~collection of data from multiple users.
+
+The~merging of the~data of multiple participants will not be handled by the~plug-in but rather by a~simple Python script that will be run once after all the~data have been collected.
+
+\section{Functionality}
+\label{sec:plugin-functionality}
+
+Based on the~analysis, it was found that all available solutions record the~data first offline and then process them.
+
+This work will focus on a~real time production of heatmaps that can be used both as a~data collection method and as a~data visualisation. Heatmaps will be produced using the~UV unwrap method utilising Unreal Materials as described in Section~\ref{sec:uv-unwrap-method}. Heatmap textures are going to~be loadable and exportable. 
+
+Two heatmaps will be recorded at the~same time. One will typically be created using the~eye gaze, but the~other one will be created based on the~forward vector of a~virtual camera inside the~scene. Both heatmaps will be produced at the~same time for later comparison. This test is intended to~be a~direct demonstration of the~usability of ET. The~collected texture with a~heatmap trail will be displayed on its object using Material. There will be another Material that will directly visualise their mutual appearance.
+
+This thesis will attempt to~implement the~entire prototype using only the~built-in visual programming via Blueprints in Unreal Engine. This is meant to~serve as proof that the~current tools are advanced and that there is really no reason why eye tracking in Unreal Engine should not be pursued by other future projects.
+
+\pagebreak{}
+
+\subsection{Actions}
+\label{sec:actions}
+
+When designing a~plug-in, it is worth imagining how an~experiment employing it will look like. The~activity diagram in Figure~\ref{fig:experiment-diagram} describes exactly one of these experiments. It is a~simple one that only initiates, runs, and ends after a~certain amount of time. Once it starts, a~game cycle is triggered that sends two rays into the~scene with each Tick. These, when they collide with an~object that has a~heatmap, will add a~value to~the~heatmap texture.
+
+This leads to~four important actions that the~plug-in must take into account. The~first is the~functionality of shooting rays and processing them. Second, the~colliding ray must recognise if it is an~object that has a~heatmap or if it is an~ordinary scene object. Third, imprinting a~value on one of the~object's textures. The~object will have two of those, so the~colliding ray classification needs to~be added. And finally, export all heatmaps.
+
+\subsubsection*{Eye Tracked object}
+
+This is an~object that will be modifiable with this plug-in. It must be defined as such to~be affected by a~ray. In the~context of the~Unreal Engine, it should be a~Component or an~Actor that has direct access to~static mesh data.
+
+During the~creation of an~experiment, the~desired functionality is that it should be sufficient to~insert this type of object into the~scene, not worry about much else, and be assured that a~ray will collide with it. As part of the~plug-in design, this object can also be used for possible subsequent iterations for other ways of visualising or collecting data.
+
+The~object will contain an~export function that saves both textures to~a~local drive. In order to~save all these textures of all objects, a~static function will have to~be defined to~iterate through all the~Eye Tracked objects in the~scene and use their respective export function.
+
+\subsubsection*{Raycaster}
+
+This object will be responsible for sending rays into the~scene based on the~input of the~origin and direction vector. Within a~test scene, these rays should be emitted from a~defined Pawn or Character that is used to~navigate through the~scene. It is logical to~use the~collision function from this perspective so that the~function itself does not use this Actor during collision calculations. If an~Actor unrelated to~the~emitted ray were used for these, the~collision would never reach the~world because it could be trapped inside a~collision volume of the~Actor, which would be part of the~collision calculations, unless excluded.
+
+One could certainly create such a~Pawn within a~plug-in and hard-code the~raycasting capabilities into it, but this is not a~solution that is extensible, as each scene may require different scene traversal logic and functionalities.
+
+Therefore, raycasting must be implemented within a~Component that can then be added to~any Pawn or Character.
+
+\subsubsection*{Heatmap renderer}
+
+The~heatmap rendering method will be adopted from this article~\cite{tran2018wenderlich} with a~static mesh UV unwrap Material defined in Section~\ref{sec:uv-unwrap-method}. The~entire rendering depends on an~Actor that must be in the~scene. This Actor has to~contain a~black projection plane placed on the~floor of the~scene that is the~size of the~unwrapped mesh, i.e. for a~1024x1024px texture, a~square plane with an~edge length of 100 cm has to~be scaled 10.24 times. The~plane creates a~black background so that the~renderer avoids parasitic surrounding effects.
+
+The~Component that will capture this is the~Scene Capture Component, which will have a~defined Show-Only List that will contain only the~rendered object with a~black background; only those two will be rendered. It must be rendered in orthographic mode, where its view width must be equal to~the~width of the~texture that will be modified.
+\pagebreak{}
+
+\begin{figure}[p]\centering{}
+    \includesvg[width=\textwidth]{img/experiment-diagram.svg}
+    \caption{Activity diagram of a~possible ET experiment collecting heatmaps.}
+    \label{fig:experiment-diagram}
+\end{figure}

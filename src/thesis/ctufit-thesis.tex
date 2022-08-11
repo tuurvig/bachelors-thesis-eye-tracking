@@ -1,0 +1,314 @@
+%% This is the~ctufit-thesis example file. It is used to produce theses
+%% for submission to Czech Technical University, Faculty of Information Technology.
+%%
+%% Get the~newest version from
+%% https://gitlab.fit.cvut.cz/theses-templates/FITthesis-LaTeX
+%%
+%%
+%% Copyright 2021, Eliska Sestakova and Ondrej Guth
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the~LaTeX Project Public Licenese, either version 1.3
+%% of this license or (at your option) any later version.
+%% The~latest version of this license is in
+%%  https://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the~LPPL maintenance status `maintained'.
+%%
+%% The~current maintainer of this work is Ondrej Guth.
+%% Contact ondrej.guth@fit.cvut.cz for bug reports.
+%% Alternatively, submit bug reports into the~tracker at
+%% https://gitlab.fit.cvut.cz/theses-templates/FITthesis-LaTeX/issues
+%%
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CLASS OPTIONS
+% language: czech/english/slovak
+% thesis type: bachelor/master/dissertation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[english,bachelor,unicode]{ctufit-thesis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FILL IN THIS INFORMATION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ctufittitle{Tracking of user’s view in virtual reality systems} % replace with the~title of your thesis
+\ctufitauthorfull{Richard Kvasnica} % replace with your full name (first name(s) and then family name(s) / surname(s)) including academic degrees
+\ctufitauthorsurnames{Kvasnica} % replace with your surname(s) / family name(s)
+\ctufitauthorgivennames{Richard} % replace with your first name(s) / given name(s)
+\ctufitsupervisor{Ing. Jan Buriánek} % replace with name of your supervisor/advisor (include academic degrees)
+\ctufitdepartment{Department of Software Engineering} % replace with the~department of your defence
+\ctufityear{2022} % replace with the~year of your defence
+\ctufitdeclarationplace{Prague} % replace with the~place where you sign the~declaration
+\ctufitdeclarationdate{\today} % replace with the~date of signature of the~declaration
+\ctufitabstractCZE{Obsahem této práce je průzkum možností sledování očí uživatele za~pomoci brýlí pro virtuální realitu, analýza existujících řešení, tvorba prototypu aplikace zabývající se~sběrem a~vizualizací pohledových dat, a~jeho použití pro~výrobu testovací scény experimentu, která slouží ke~sběru těchto dat od vícero uživatelů. Z~nasbíraných dat se vytvoří výsledná data, která se analyzují.
+Prototyp aplikace je koncipován jako zásuvný modul pro~\emph{Unreal Engine~4} (UE4). Pro~vizualizaci a~sběr pohledových dat je použit způsob vyrábění teplotních map pro~každý objekt ve~scéně zvlášť. Popisuje~se návrh modulu, jeho implementace a~jeho použití na~výrobu experimentu testující průchod novým Návštěvnickým centrem České Národní Banky.%Tuto scénu poskytl Ing.~Jan Buriánek a~Vít Procházka ve spolupráci s AVMEDIA SYSTEMS.
+Scéna je v~Blenderu a~práce popisuje její nutné úpravy potřebné pro~export do~UE4 k~zajištění korektní funkčnosti experimentu.
+Výsledkem této práce je~funkční prototyp zásuvného modulu pro UE4 schopný záznamu pohledových dat skrze vyrábění teplotních map v~reálném čase, který není závislý na~konkrétním hardwaru pro sledování očí. Dále nabízí popis použití brýlí XTAL, které nebylo možné zprovoznit ke~sběru pohledových dat z~důvodu nestability jejich OpenXR běhového prostředí. Jiná alternativa nebyla, tak se ke~sběru dat od~různých uživatelů používají směrové vektory virtuální kamery ve~scéně Unreal Engine projektu. Nakonec práce popisuje zpracování a~vyhodnocení nasbíraných dat. Zásuvný modul a~Unreal Engine projekt s~experimentem i nasbíranými daty je dostupný na~přiloženém médiu práce.}
+
+\ctufitabstractENG{The~purpose of this thesis is to explore the~possibilities of eye tracking inside headsets for virtual reality, to~analyse existing solutions, to~create a~prototype application that collects and visualises gaze data, and use it to~create an~experiment that collects the~data from multiple users. The~collected data are used to make resultant data that are analysed.
+A~plug-in for \emph{Unreal Engine 4} (UE4) is the~form selected for the~prototype application. To~visualise the~gaze data, heatmaps are generated for each object in the~scene. This~thesis describes the~design of the~\emph{plug-in}, its implementation and its use to~create an~experiment of a~traversal through a~scene of the~Czech National Bank Visitor Centre. %This scene was provided by Ing. Jan Buriánek and Vít Procházka in cooperation with AVMEDIA SYSTEMS.
+The~scene is in \emph{Blender}, and the~thesis describes the~necessary modifications needed for a~successful export to~UE4 to~achieve the~correct functionality of the~experiment.
+The~result of this thesis is a~working prototype of a~\emph{plug-in} for UE4, capable of collecting gaze data to~produce heatmaps in real-time, that is not dependent on any eye tracking hardware. It~also offers a~description of the~use of XTAL, which was not possible to make operational to~collect gaze data due to the instability of its OpenXR runtime. There was no other alternative, so the~forward vectors of a~virtual camera in the~Unreal Engine project scene were used to collect data from different users. Finally, the~thesis describes the~processing and evaluation of the~data collected. The~plug-in, the~Unreal Engine project with the~experiment and the~data are available in the~enclosed media DVD.}
+\ctufitkeywordsCZE{virtuální realita, sledování pohybu očí, teplotní mapa, Unreal Engine, zásuvný modul, XTAL}
+\ctufitkeywordsENG{virtual reality, eye tracking, heatmap, Unreal Engine, plug-in, XTAL}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% END FILL IN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CUSTOMIZATION of this template
+% Skip this part or alter it if you know what you are doing.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{iftex}[2020/03/06]
+\iftutex % XeLaTeX and LuaLaTeX
+    \RequirePackage{ellipsis}[2020/05/22] %ellipsis workaround for XeLaTeX
+\else
+    \RequirePackage[utf8]{inputenc}[2018/08/11] %this file encoding
+    \RequirePackage{lmodern}[2009/10/30] % vector flavor of Computer Modern font
+\fi
+
+% hyperlinks
+\RequirePackage[pdfpagelayout=TwoPageRight,colorlinks=false,allcolors=decoration,pdfborder={0 0 0.1}]{hyperref}[2020-05-15]
+
+% uncomment the~following to hide all hyperlinks
+% \RequirePackage[pdfpagelayout=TwoPageRight,hidelinks]{hyperref}[2020-05-15]
+
+\RequirePackage{pdfpages}[2020/01/28]
+
+\setcounter{secnumdepth}{4} % numbering sections; 4: subsubsection
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CUSTOMIZATION of this template END
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+% DEMO CONTENTS SETTINGS
+% You may choose to modify this part.
+%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{dirtree}
+\usepackage{lipsum,tikz}
+\usepackage{csquotes}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{svg}
+\usepackage[style=iso-numeric]{biblatex}
+\addbibresource{text/bib-database.bib}
+%\usepackage{listings} % typesetting of sources
+% \usepackage{minted} % typesetting of sources
+
+
+%theorems, definitions, etc.
+\theoremstyle{plain}
+\newtheorem{theorem}{Věta}
+\newtheorem{lemma}[theorem]{Tvrzení}
+\newtheorem{corollary}[theorem]{Důsledek}
+\newtheorem{proposition}[theorem]{Návrh}
+\newtheorem{definition}[theorem]{Definice}
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Příklad}
+\theoremstyle{remark}
+\newtheorem{note}[theorem]{Poznámka}
+\newtheorem*{note*}{Poznámka}
+\newtheorem{remark}[theorem]{Pozorování}
+\newtheorem*{remark*}{Pozorování}
+\numberwithin{theorem}{chapter}
+%theorems, definitions, etc. END
+%%%%%%%%%%%%%%%%%%%%%%
+% DEMO CONTENTS SETTINGS END
+%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document} 
+\frontmatter\frontmatterinit % do not remove these two commands
+
+\includepdf{kvasnric-assignment.pdf} % replace that file with your thesis assignment provided by study office
+
+\thispagestyle{empty}\cleardoublepage\maketitle % do not remove these three commands
+
+\imprintpage % do not remove this command
+
+\tableofcontents % do not remove this command
+%%%%%%%%%%%%%%%%%%%%%%
+% list of other contents: figures, tables, code listings, algorithms, etc.
+% add/remove commands accordingly
+%%%%%%%%%%%%%%%%%%%%%%
+\listoffigures % list of figures
+\begingroup
+\let\clearpage\relax
+\listoftables % list of tables
+%\lstlistoflistings % list of source code listings generated by the~listings package
+% \listoflistings % list of source code listings generated by the~minted package
+\endgroup
+%%%%%%%%%%%%%%%%%%%%%%
+% list of other contents END
+%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%
+% ACKNOWLEDGMENT
+% FILL IN / MODIFY
+% This is a~place to thank people for helping you. It is common to thank your supervisor.
+%%%%%%%%%%%%%%%%%%%
+\begin{acknowledgmentpage}
+	First of all, I would like to express my gratitude to my supervisor who allowed me to work on this topic and offered me a~lot of useful and factual advice. Next, I would like to thank my friends for their moral and mental encouragement, but, most importantly, I want to express my deepest gratitude to my family. For their constant support, love, and the~nerves of steel throughout my studies.
+\end{acknowledgmentpage} 
+%%%%%%%%%%%%%%%%%%%
+% ACKNOWLEDGMENT END
+%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%
+% DECLARATION
+% FILL IN / MODIFY
+%%%%%%%%%%%%%%%%%%%
+% INSTRUCTIONS
+% ENG: choose one of approved texts of the~declaration. DO NOT CREATE YOUR OWN. Find the~approved texts at https://courses.fit.cvut.cz/SFE/download/index.html#_documents (document Declaration for FT in English)
+% CZE/SLO: Vyberte jedno z fakultou schvalenych prohlaseni. NEVKLADEJTE VLASTNI TEXT. Schvalena prohlaseni najdete zde: https://courses.fit.cvut.cz/SZZ/dokumenty/index.html#_dokumenty (prohlášení do ZP)
+\begin{declarationpage}
+I hereby declare that the~presented thesis is my own work and that I have cited all 
+sources of information in accordance with the~Guideline for adhering to ethical 
+principles when elaborating an~academic final thesis.
+
+I acknowledge that my thesis is subject to the~rights and obligations stipulated by the~
+Act No. 121/2000 Coll., the~Copyright Act, as amended. In accordance with Article 46(6) 
+of the~Act, I hereby grant a~nonexclusive authorization (license) to utilize this thesis, 
+including any and all computer programs incorporated therein or attached thereto and 
+all corresponding documentation (hereinafter collectively referred to as the~“Work”), to 
+any and all persons that wish to utilize the~Work. Such persons are entitled to use the~
+Work in any way (including for-profit purposes) that does not detract from its value.
+This authorization is not limited in terms of time, location and quantity. However, all 
+persons that makes use of the~above license shall be obliged to grant a~license at least 
+in the~same scope as defined above with respect to each and every work that is created 
+(wholly or in part) based on the~Work, by modifying the~Work, by combining the~Work 
+with another work, by including the~Work in a~collection of works or by adapting the~
+Work (including translation), and at the~same time make available the~source code of 
+such work at least in a~way and scope that are comparable to the~way and scope in 
+which the~source code of the~Work is made available.
+\end{declarationpage}
+%%%%%%%%%%%%%%%%%%%
+% DECLARATION END
+%%%%%%%%%%%%%%%%%%%
+
+\printabstractpage % do not remove this command
+
+
+%%%%%%%%%%%%%%%%%%%
+% ABBREVIATIONS
+% FILL IN / MODIFY
+% OR REMOVE ENTIRELY
+% List the~abbreviations in lexicography order.
+%%%%%%%%%%%%%%%%%%%
+\chapter{Acronyms}
+	
+\begin{tabular}{rl}
+VR & virtual reality \\
+AR & augmented reality \\
+XR & mixed reality \\
+3D & three-dimensional \\ 
+2D & two-dimensional \\
+ET & eye tracking \\
+UE & Unreal Engine \\
+WS & World Space \\
+IR & infrared \\
+NIR & near infrared \\
+UE4 & Unreal Engine 4 \\
+UE5 & Unreal Engine 5 \\
+HMD & head-mounted display \\
+FOV & field of view \\
+IPD & interpupillary distance \\
+SDK & Software Development Kit \\
+PoR & Point of Regard \\
+RoI & Region of Interest \\
+app & application \\
+FPS & frames per second \\
+CNN & Convolutional Neural Network \\
+GPU & Graphics processing unit \\
+SLAM & Simultaneous Localisation and Mapping \\
+PCCR & Pupil Centre Cornea Reflexion \\
+auto-PID & automatic interpupillary distance \\
+Unreal & Unreal Engine \\
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%
+% ABBREVIATIONS END
+%%%%%%%%%%%%%%%%%%%
+
+\mainmatter\mainmatterinit % do not remove these two commands
+
+%%%%%%%%%%%%%%%%%%%
+% THE THESIS
+% MODIFY ANYTHING BELOW THIS LINE
+%%%%%%%%%%%%%%%%%%%
+
+%\include{text/text} % include `text.tex' from `text/' subdirectory
+
+\chapter{Introduction}
+\emph{Virtual~reality} (VR) has experienced unprecedented growth in~recent years. Since the~release of~\emph{Oculus~Rift~DK1}, head-mounted displays (HMDs) for~VR have registered annual advances in~technical properties. The~new devices operate at~higher resolution and faster refresh rates, and also introduce new hardware features that~broaden their set of tools. One of~such is~\emph{eye~tracker}; the~subject of this thesis.
+
+The~desired effect is to~use our eyes as a~computer input, to~interact in a~virtual world, and to~process our visual attention by~collecting data about them. This~hardware enables a~VR~headset to~track the~movement of its user's eyes to~determine \emph{gaze~direction} in a~virtual 3D space. The~most current use has been found in measuring \emph{interpupillary distance} (IPD) to adjust lens positions in HMD and in foveated rendering, which optimises graphics performance by~lowering rendering resolution in the~area around the~point on~display where the~gaze, line of sight, intersects.
+
+Performing an~experiment inside a~virtual 3D scene brings the~advantage of knowing all the~information about the~objects contained in it, especially their location and rotation in world space. This~allows gaze data to~be collected and processed over time for each object separately using simple trace utilities (\emph{raycasting}) of current game engines. The~resultant data can determine whether the~object had been seen or not, how many times it had been seen, and how long it had been gazed at. Such abilities can have numerous practical applications.
+
+The~prime example is the~possible use in VR training for various professions. They all have different rules, work safety, mandatory steps during procedures, and best practises. All of this can be translated into test scenarios and then divided into multiple objectives that represent user actions. For illustrative purposes, imagine a~situation where the~driver of a~car changes lanes on the~road. The~driver should look in the~rearview mirror, activate a~turn signal on the~same side, look again, do the~actual turn, and finally deactivate the~signal. This sequence of actions can be programmed in a~testing environment, and the~action of whether the~user gazed at the~mirror could be registered with \emph{eye~tracking} (ET). These objective-based systems can provide constructive feedback because they can accurately identify whether a~trainee followed the~procedure or made a~mistake. On a~larger scale, a~statistical model can be built for the~entire experiment when sessions of different participants are analysed and compared.
+
+\pagebreak{}
+Collecting information about subject's behaviour in a~virtual environment using scenarios and objectives is an~abstract concept that is not exclusive for VR training and could be applied to~other use cases as~well. For~example, market research. Analyse what people look for in a~supermarket and creating a~heatmap around items that drew the~most visual attention.
+
+\medskip
+At~the~time of writing this thesis, there were very few software solutions that addressed the~problem of eye tracking in virtual reality. Those that do exist are proprietary solutions with a~steep price tag. This thesis will propose a~possible solution of collecting and visualising gaze data that will be implemented with the~use of current technology.
+
+\section{Goals}
+
+The~aim of this thesis is to~investigate the~state-of-the-art of eye tracking technology, current devices, to~explain the~overall process of~measuring eye movements and~translating them into a~3D world, to~explore the~possibilities of using this~technology to~collect and visualise user gaze data in a~predefined 3D scene, and to~analyse the~existence of other solutions that have already addressed this topic.
+
+
+The~main goal is to~select an~available eye tracking device and build a~prototype application in a~modern \emph{game engine} that will be able to~collect and visualise gaze data. The~app will be used to~create an~experiment to~test user behaviour within a~virtual 3D scene in the~same engine. Data from multiple participants will be~collected and evaluated. 
+
+
+\bigskip
+
+The~Bachelor's thesis is divided into five core parts, where the~first one will be devoted to the~description of ET processes and principles not only used in the~context of VR.
+
+In~the~second part, the~thesis will analyse other existing solutions and work done within the~scope of this topic. Explore current hardware, software solutions, and analyse how gaze data can be collected and visualised.
+
+The~third part will propose a~solution based on the~previous findings and design a~prototype application in a~\emph{game~engine} of choice. The~fourth one will focus on the~implementation of the~designed prototype, that will be used later by the~last part, which will cover the~creation of an~experiment and the~collection of gaze data.
+
+\include{text/chapter1}
+\include{text/chapter2-analysis}
+\include{text/chapter3-design}
+\include{text/chapter4-implementation}
+\include{text/chapter5-experiment}
+
+
+
+\chapter{Conclusion}
+
+The~main goal of this thesis was to develop a~prototype application inside a~modern game engine that collects and visualises gaze data and use it to build an~experiment that collects data from multiple participants inside a~3D virtual scene. 
+
+An~analysis of existing hardware and software solutions that use eye tracking was performed. Based on this analysis, it was decided that the~prototype application would be designed as a~plug-in for Unreal Engine 4. The~plugin extends the~functionality of the~engine with the~ability to create heatmaps in real-time using raycasting, which was designed to be independent of any specific ET hardware. The~only thing the~plug-in needs is a~gaze origin and direction in world coordinates. The~plug-in allows two types of heatmap to be captured at once. One that collects gaze data and one that collects forward vectors of a~virtual camera. It is possible to visualise their mutual appearance. 
+
+An~Unreal Engine scene was created from a~prototype 3D model of the~Czech National Bank Visitor Centre in Blender. It was originally intended to use the~XTAL headset to collect gaze data, but due to the~instability of its OpenXR runtime in Unreal Engine this could not be accomplished. Several unsuccessful attempts were made to fix the~bug. Among them was the~migration of the~experiment project to the~new Unreal Engine 5. Data collection from multiple participants was done with XTAL, but only using forward vectors of the~virtual camera.
+
+Heatmaps were collected from 12 different participants. These data were processed into resultant data that visualised the~collective visual attention of this group of participants. From this, it was evaluated which objects in the~scene were noticed the~most and why. 
+
+
+\section*{Future Work}
+
+This thesis offers a~working prototype of a~plug-in for UE4 that collects and visualises gaze data using heatmaps that can be used to produce more complicated experiments exploring the~behaviour of a~much larger group of people than was used in this thesis. It is possible to try any other VR headset with ET. There is plenty of room for improvement. One of the~main ideas that had not been done, because it was not even possible to test, is the~classification of gaze data into saccades and fixations. Synchronise with the~maximum output that the~eye tracker offers and perform these classifications faster than each Tick. This could be used to create a~scanpath or to store fixation metrics per region of interest in real time. This would allow for the~implementation of other visualisation and data collection methods.
+
+One way to extend it would be to implement an~objective-based system similar to the~one described in the~analysis of Cognitive3D's software that would attach gaze events to objects that will get triggered when it is gazed at. 
+\appendix\appendixinit % do not remove these two commands
+
+\include{text/appendix} % include `appendix.tex' from `text/' subdirectory
+
+\backmatter % do not remove this command
+
+\printbibliography % print out the~BibLaTeX-generated bibliography list
+
+\include{text/medium} % include `medium.tex' from `text/' subdirectory
+
+\end{document}
