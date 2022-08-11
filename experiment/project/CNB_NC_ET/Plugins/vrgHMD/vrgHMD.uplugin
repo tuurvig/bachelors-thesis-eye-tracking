@@ -1,0 +1,33 @@
+{
+  "FileVersion": 3,
+  "Version": 2,
+  "VersionName": "2.06",
+  "FriendlyName": "vrgineers HMD",
+  "Description": "Support for vrgineers VR headset.",
+  "Category": "Virtual Reality",
+  "CreatedBy": "VRG",
+  "CreatedByURL": "http://vrgineers.com",
+  "DocsURL": "",
+  "MarketplaceURL": "",
+  "SupportURL": "",
+  "CanContainContent": false,
+  "Installed": true,
+  "Modules": [
+    {
+      "Name": "vrgHMD",
+      "Type": "Runtime",
+      "LoadingPhase": "Default",
+      "WhitelistPlatforms": [
+        "Win64"
+      ]
+    },
+    {
+      "Name": "SteamVRController",
+      "Type": "Runtime",
+      "LoadingPhase": "Default",
+      "WhitelistPlatforms": [
+        "Win64"
+      ]
+    }
+  ]
+}

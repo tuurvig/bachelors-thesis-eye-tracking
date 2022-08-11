@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "EyeTrackingUtilities",
+	"Description": "data collecting and visualisation capabilities for eye tracking",
+	"Category": "Other",
+	"CreatedBy": "Richard Kvasnica",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "EyeTrackingUtilities",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
